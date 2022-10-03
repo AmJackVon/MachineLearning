@@ -36,7 +36,7 @@ def Sigmoid(Inputs):
 def Train(TrainSet, Epochs=100, Learning_Rate=0.00001, Batch_Size=36):
     print("Train:")
     ParamNum, Features, Labels = LoadData(TrainSet)
-    LossRecoder = []
+    AccRecoder = []
     # Init parameter
     Param = torch.randn((ParamNum, 1))*10
     # Begin Train
@@ -44,8 +44,7 @@ def Train(TrainSet, Epochs=100, Learning_Rate=0.00001, Batch_Size=36):
     for epoch in range(Epochs):
         if (epoch + 1) % 100 == 0:
             Learning_Rate = Learning_Rate / 2
-        ACC = 0
-        Start = 0
+        ACC, Start = 0, 0
         while Start < DataNumber:
             Stop = Start + Batch_Size
             Stop = DataNumber if Stop >= DataNumber else Stop
@@ -60,10 +59,10 @@ def Train(TrainSet, Epochs=100, Learning_Rate=0.00001, Batch_Size=36):
                 for num in range(Param.shape[0]):
                     Param[num][0] = Param[num][0] + Learning_Rate * Features[index][num] * Diffr
             Start = Start + Batch_Size
-        LossRecoder.append(ACC / DataNumber * 100)
+        AccRecoder.append(ACC / DataNumber * 100)
         print(f"\tepoch {epoch + 1}  Loss:{ACC / DataNumber * 100:0.2f}%")
-    # Return Parameter,LossRecoder
-    return Param, LossRecoder
+    # Return Parameter,AccRecoder
+    return Param, AccRecoder
 
 if __name__ == "__main__":
     epoch = 50
